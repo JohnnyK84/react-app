@@ -1,46 +1,78 @@
 import React, { Component } from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import Person from './Person/Person'
-
-let name = 'Big PaPa';
-let age = 29;
+import Person from './Person/Person';
 
 class App extends Component {
   //state property
-    state = {
-      persons: [
-        { name: 'J Dawg', age: 28},
-        { name: 'P Dawg', age: 69},
-        { name: 'JLawrence', age: 29}
-      ],
-      otherstate: 'some other value'
-    };
-
-  render() {    
-    return (
-      <div className="App">
-        <p className="display-1">Hello World</p>
-        <input type="text"></input><br className="mt-2"></br>
-        <button type="submit" onClick={this.eventHandler}>Switch Name</button>
-        <Person name={this.state.persons[0].name} age={this.state.persons[0].age}> yeah Ghee</Person>
-        <Person name={this.state.persons[1].name} age={this.state.persons[1].age}> yeah Ghee</Person>
-        <Person name={this.state.persons[2].name} age={this.state.persons[2].age}></Person>
-      </div>
-    );
+  state = {
+    persons: [
+      { name: 'J Dawg', age: 28},
+      { name: 'P Dawg', age: 69},
+      { name: 'JLawrence', age: 29}
+    ],
+    showPersons:  false
   };
 
-  eventHandler = () => {
+  switchNameHandler = (newName) => {
     //alert('Clicked');
     // DONT CHANGE STATE LIKE THIS: this.state.persons[0].name = 'JK';
     this.setState({
       persons: [
-        {name: 'JK', age: 34},
+        {name: newName, age: 34},
         { name: 'P Dawg', age: 69},
         { name: 'JLawrence', age: 25}
       ]
     });
   };
+
+  nameChangedHandler =(event) => {
+    this.setState({
+      persons: [
+        { name: 'J Dawg', age: 34},
+        { name: event.target.value , age: 69},
+        { name: 'JLawrence', age: 25}
+      ]
+    });    
+  }
+
+  hidePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    /*call setState to adjust the state...
+    set showPerons to what doesShow is not e.g if doesShow is false set showPersons to true*/
+    this.setState({showPersons: !doesShow}); 
+  }
+
+  render() {    
+    return (
+      <div className="App">
+        <h1 className="display-4">First React App</h1>
+        <button className="btn btn-primary mb-3"type="submit" onClick={this.hidePersonsHandler}>Switch Name</button>
+        {
+          //ternary expression checks if showPersons is true or false
+          this.state.showPersons ?
+            //if true render content
+            <div>
+              <Person 
+                name={this.state.persons[0].name} 
+                age={this.state.persons[0].age}> child element of Person 1
+              </Person>
+              <Person 
+                name={this.state.persons[1].name} 
+                age={this.state.persons[1].age}
+                click={this.switchNameHandler.bind(this, 'Johnny!')} 
+                changed={this.nameChangedHandler}
+                > child element of Person 2          
+              </Person>
+              <Person 
+                name={this.state.persons[2].name} 
+                age={this.state.persons[2].age}>
+              </Person>
+            </div> : null //if false null(render nothing)
+          }  
+      </div>
+    );
+  };  
 };
 
 export default App;
