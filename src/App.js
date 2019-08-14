@@ -7,33 +7,27 @@ class App extends Component {
   //state property
   state = {
     persons: [
-      { name: 'J Dawg', age: 28},
-      { name: 'P Dawg', age: 69},
-      { name: 'JLawrence', age: 29}
+      { id: 11, name: 'J Dawg', age: 28},
+      { id: 12, name: 'P Dawg', age: 69},
+      { id: 13, name: 'JLawrence', age: 29}
     ],
     showPersons:  false
   };
 
-  switchNameHandler = (newName) => {
-    //alert('Clicked');
-    // DONT CHANGE STATE LIKE THIS: this.state.persons[0].name = 'JK';
-    this.setState({
-      persons: [
-        {name: newName, age: 34},
-        { name: 'P Dawg', age: 69},
-        { name: 'JLawrence', age: 25}
-      ]
-    });
-  };
-
-  nameChangedHandler =(event) => {
+  nameChangedHandler = (event) => {
     this.setState({
       persons: [
         { name: 'J Dawg', age: 34},
         { name: event.target.value , age: 69},
         { name: 'JLawrence', age: 25}
-      ]
-    });    
+      ]})
+  }
+
+  deletePersonHandler = (personIndex) => {
+    //const persons =this.state.persons.slice(); or use es6 method to make copy of array:
+    const persons = [...this.state.persons]; //equivelent of slice approach
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons})
   }
 
   hidePersonsHandler = () => {
@@ -51,10 +45,15 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map(person => {
+          {/* use vanilla JS function map() to copy javascript state array and execute person => function on
+          each element of the array to return as JS objects from state as JSX readable elements */}
+          {this.state.persons.map((person, index) => {
+              //jsx returned
               return <Person
+              click={() => this.deletePersonHandler(index)}
               name={person.name}
-              age={person.age} />
+              age={person.age}
+              key={person.id} /> //person key added to help react efeficiently update only necessary parts of 
             }
           )}
         </div>
