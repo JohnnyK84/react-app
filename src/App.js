@@ -43,33 +43,39 @@ class App extends Component {
     this.setState({showPersons: !doesShow}); 
   }
 
-  render() {    
+  render() {
+    
+    //the better JavaScript way of making content conditional
+    let persons = null;
+    //check showPersons and make persons = content to be displayed
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person 
+            name={this.state.persons[0].name} 
+            age={this.state.persons[0].age}> child element of Person 1
+          </Person>
+          <Person 
+            name={this.state.persons[1].name} 
+            age={this.state.persons[1].age}
+            click={this.switchNameHandler.bind(this, 'Johnny!')} 
+            changed={this.nameChangedHandler}
+            > child element of Person 2          
+          </Person>
+          <Person 
+            name={this.state.persons[2].name} 
+            age={this.state.persons[2].age}>
+          </Person>
+        </div>
+      );
+    }
+    
     return (
       <div className="App">
         <h1 className="display-4">First React App</h1>
-        <button className="btn btn-primary mb-3"type="submit" onClick={this.hidePersonsHandler}>Switch Name</button>
-        {
-          //ternary expression checks if showPersons is true or false
-          this.state.showPersons ?
-            //if true render content
-            <div>
-              <Person 
-                name={this.state.persons[0].name} 
-                age={this.state.persons[0].age}> child element of Person 1
-              </Person>
-              <Person 
-                name={this.state.persons[1].name} 
-                age={this.state.persons[1].age}
-                click={this.switchNameHandler.bind(this, 'Johnny!')} 
-                changed={this.nameChangedHandler}
-                > child element of Person 2          
-              </Person>
-              <Person 
-                name={this.state.persons[2].name} 
-                age={this.state.persons[2].age}>
-              </Person>
-            </div> : null //if false null(render nothing)
-          }  
+        <button className="btn btn-primary mb-3"type="submit" onClick={this.hidePersonsHandler}>Toggle Persons</button>
+        
+        {persons/*if showPersons is set to true persons will be rendered*/}
       </div>
     );
   };  
